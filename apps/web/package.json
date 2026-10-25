@@ -11,9 +11,11 @@
   },
   "dependencies": {
     "@fontsource/press-start-2p": "^5.3.0",
+    "@tonejs/midi": "^2.0.28",
     "@vincente/ui": "workspace:*",
     "react": "^19.3.1",
-    "react-dom": "^19.3.1"
+    "react-dom": "^19.3.1",
+    "tone": "^15.1.22"
   },
   "devDependencies": {
     "@types/node": "^24.19.2",

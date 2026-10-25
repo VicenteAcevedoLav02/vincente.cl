@@ -3,7 +3,7 @@ import styles from "./TitleLetter.module.css"
 
 type LetterStyle = CSSProperties & {
   "--letter": string
-  "--lift": string
+  "--index": number
 }
 
 type TitleLetterProps = {
@@ -23,7 +23,7 @@ function accessibleName(char: string): string {
 export function TitleLetter({ char, color, index, onClick }: TitleLetterProps) {
   const style: LetterStyle = {
     "--letter": color,
-    "--lift": index % 2 === 0 ? "-4px" : "4px",
+    "--index": index,
   }
 
   return (
@@ -34,7 +34,7 @@ export function TitleLetter({ char, color, index, onClick }: TitleLetterProps) {
       aria-label={accessibleName(char)}
       onClick={onClick}
     >
-      {char}
+      <span className={styles.glyph}>{char}</span>
     </button>
   )
 }

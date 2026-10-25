@@ -1,6 +1,17 @@
+@property --index {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0;
+}
+
+@property --wave-steps {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 1;
+}
+
 .letter {
   --letter: #111111;
-  --lift: 0px;
   --shade: color-mix(in srgb, var(--letter) 52%, #160e08);
   --edge: color-mix(in srgb, var(--letter) 22%, #0e0c0a);
   position: relative;
@@ -16,7 +27,13 @@
   white-space: nowrap;
   cursor: pointer;
   user-select: none;
-  transform: translateY(var(--lift));
+  transform: translateY(0);
+  transition: transform 180ms cubic-bezier(0.34, 1.45, 0.64, 1);
+}
+
+.glyph {
+  display: block;
+  color: inherit;
   -webkit-text-stroke: 0.12em #161616;
   paint-order: stroke fill;
   text-shadow:
@@ -27,14 +44,14 @@
     0.25em 0.25em 0 var(--shade),
     0.3em 0.3em 0 var(--shade),
     0.34em 0.34em 0 var(--edge);
-  transition:
-    transform 180ms cubic-bezier(0.34, 1.45, 0.64, 1),
-    text-shadow 120ms ease;
+  animation: wave 3s linear infinite;
+  animation-delay: calc((var(--wave-steps) - var(--index)) * -3s / var(--wave-steps));
+  transition: text-shadow 120ms ease;
 }
 
 .letter:hover {
   z-index: 1;
-  transform: translateY(calc(var(--lift) - 6px)) scale(1.06);
+  transform: translateY(-6px) scale(1.06);
 }
 
 .letter:focus {
@@ -48,7 +65,12 @@
 }
 
 .letter:active {
-  transform: translate(0.16em, calc(var(--lift) + 0.2em)) scale(0.98);
+  transform: translate(0.16em, 0.2em) scale(0.98);
+  transition-duration: 70ms;
+  transition-timing-function: ease-out;
+}
+
+.letter:active .glyph {
   text-shadow:
     0.04em 0.04em 0 var(--shade),
     0.08em 0.08em 0 var(--edge);
@@ -56,8 +78,25 @@
   transition-timing-function: ease-out;
 }
 
+@keyframes wave {
+  0% { transform: translateY(0); }
+  12.5% { transform: translateY(-7.07px); }
+  25% { transform: translateY(-10px); }
+  37.5% { transform: translateY(-7.07px); }
+  50% { transform: translateY(0); }
+  62.5% { transform: translateY(7.07px); }
+  75% { transform: translateY(10px); }
+  87.5% { transform: translateY(7.07px); }
+  100% { transform: translateY(0); }
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .letter {
+  .letter,
+  .glyph {
     transition: none;
+  }
+
+  .glyph {
+    animation: none;
   }
 }

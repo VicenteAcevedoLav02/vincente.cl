@@ -1,3 +1,4 @@
+import { BackgroundMidiPlayer } from "./components/BackgroundMidiPlayer.tsx"
 import { Footer } from "./components/Footer.tsx"
 import { Title } from "./components/Title.tsx"
 import styles from "./App.module.css"
@@ -5,6 +6,7 @@ import styles from "./App.module.css"
 export default function App() {
   return (
     <div className={styles.page}>
+      <BackgroundMidiPlayer />
       <main className={styles.stage}>
         <Title />
       </main>
