@@ -1,0 +1,12 @@
+.footer {
+  margin: 0 1rem clamp(2rem, 6vh, 3.5rem);
+  text-align: center;
+}
+
+.text {
+  margin: 0;
+  font-family: "Press Start 2P", monospace;
+  font-size: clamp(0.45rem, 2.15vw, 0.68rem);
+  line-height: 1.7;
+  color: #4a4a4a;
+}

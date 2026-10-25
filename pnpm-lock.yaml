@@ -17,6 +17,9 @@ importers:
 
   apps/web:
     dependencies:
+      '@fontsource/press-start-2p':
+        specifier: ^5.3.0
+        version: 5.3.0
       '@vincente/ui':
         specifier: workspace:*
         version: link:../../packages/ui
@@ -56,6 +59,9 @@ importers:
         version: 19.3.1
 
 packages:
+
+  '@fontsource/press-start-2p@5.3.0':
+    resolution: {integrity: sha512-gxWFxdeDglPhEYSwEeooomcaFK8kSQYLQwVxfnOJeYRj2sPEHXjpVtFgEaYfqzOjuAJGrIcJOipu2KY5YkbyuQ==}
 
   '@oxc-project/types@0.155.0':
     resolution: {integrity: sha512-SeE8JPwW1xs1tHeNycjUtUBdhorRa8o4jlvjwk49R7/Z291i+4DQa7JJIgOm/TaYQZx+QrPQbVJ/9c8dMIZN8Q==}
@@ -530,6 +536,8 @@ packages:
         optional: true
 
 snapshots:
+
+  '@fontsource/press-start-2p@5.3.0': {}
 
   '@oxc-project/types@0.155.0': {}
 

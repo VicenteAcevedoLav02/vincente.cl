@@ -1,0 +1,63 @@
+.letter {
+  --letter: #111111;
+  --lift: 0px;
+  --shade: color-mix(in srgb, var(--letter) 52%, #160e08);
+  --edge: color-mix(in srgb, var(--letter) 22%, #0e0c0a);
+  position: relative;
+  appearance: none;
+  margin: 0;
+  padding: 0.08em 0.02em 0.42em;
+  border: 0;
+  background: transparent;
+  color: var(--letter);
+  font: inherit;
+  line-height: 1;
+  letter-spacing: 0;
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+  transform: translateY(var(--lift));
+  -webkit-text-stroke: 0.12em #161616;
+  paint-order: stroke fill;
+  text-shadow:
+    0.05em 0.05em 0 var(--shade),
+    0.1em 0.1em 0 var(--shade),
+    0.15em 0.15em 0 var(--shade),
+    0.2em 0.2em 0 var(--shade),
+    0.25em 0.25em 0 var(--shade),
+    0.3em 0.3em 0 var(--shade),
+    0.34em 0.34em 0 var(--edge);
+  transition:
+    transform 180ms cubic-bezier(0.34, 1.45, 0.64, 1),
+    text-shadow 120ms ease;
+}
+
+.letter:hover {
+  z-index: 1;
+  transform: translateY(calc(var(--lift) - 6px)) scale(1.06);
+}
+
+.letter:focus {
+  outline: none;
+}
+
+.letter:focus-visible {
+  z-index: 1;
+  outline: 3px solid #161616;
+  outline-offset: 0.2em;
+}
+
+.letter:active {
+  transform: translate(0.16em, calc(var(--lift) + 0.2em)) scale(0.98);
+  text-shadow:
+    0.04em 0.04em 0 var(--shade),
+    0.08em 0.08em 0 var(--edge);
+  transition-duration: 70ms;
+  transition-timing-function: ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .letter {
+    transition: none;
+  }
+}
