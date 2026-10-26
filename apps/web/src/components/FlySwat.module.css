@@ -1,0 +1,31 @@
+.field {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.fly {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 1;
+  width: 52px;
+  height: 32px;
+  pointer-events: none;
+  image-rendering: pixelated;
+  user-select: none;
+}
+
+.cursor {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 40;
+  width: 128px;
+  height: 160px;
+  pointer-events: none;
+  image-rendering: pixelated;
+  user-select: none;
+}

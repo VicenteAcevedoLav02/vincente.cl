@@ -265,9 +265,20 @@ export function BackgroundMidiPlayer() {
   useEffect(() => {
     let disposed = false
     let playbackArmed = false
+    let scheduling = false
     let scheduled = false
+    let listening = false
     let parsed: Midi | null = null
     let voices: VoiceBank | null = null
+
+    const detachInteract = () => {
+      if (!listening) {
+        return
+      }
+      listening = false
+      window.removeEventListener("pointerdown", onInteract)
+      window.removeEventListener("click", onInteract)
+    }
 
     const startTransport = () => {
       if (disposed || !playbackArmed || !parsed || !scheduled) {
@@ -279,7 +290,7 @@ export function BackgroundMidiPlayer() {
     }
 
     const beginPlayback = () => {
-      if (disposed || !playbackArmed || !parsed || scheduled) {
+      if (disposed || !playbackArmed || !parsed || scheduled || scheduling) {
         return
       }
 
@@ -288,6 +299,8 @@ export function BackgroundMidiPlayer() {
         console.error("Background MIDI: file has no playable notes")
         return
       }
+
+      scheduling = true
 
       const tempo = parsed.header.tempos[0]?.bpm
       if (typeof tempo === "number" && Number.isFinite(tempo) && tempo > 0) {
@@ -304,21 +317,48 @@ export function BackgroundMidiPlayer() {
       startTransport()
     }
 
-    const onInteract = () => {
-      window.removeEventListener("pointerdown", onInteract)
-      window.removeEventListener("click", onInteract)
-      playbackArmed = true
+    const attemptPlay = () => {
+      if (disposed) {
+        return
+      }
       void Tone.start()
         .then(() => {
+          if (disposed) {
+            return
+          }
+          if (Tone.getContext().state !== "running") {
+            attachInteract()
+            return
+          }
+          detachInteract()
+          playbackArmed = true
           beginPlayback()
         })
         .catch((error: unknown) => {
+          if (error instanceof DOMException && error.name === "NotAllowedError") {
+            attachInteract()
+            return
+          }
           reportMidiError(error)
+          attachInteract()
         })
     }
 
-    window.addEventListener("pointerdown", onInteract)
-    window.addEventListener("click", onInteract)
+    function onInteract() {
+      playbackArmed = true
+      attemptPlay()
+    }
+
+    function attachInteract() {
+      if (listening || disposed) {
+        return
+      }
+      listening = true
+      window.addEventListener("pointerdown", onInteract)
+      window.addEventListener("click", onInteract)
+    }
+
+    attachInteract()
 
     const load = async () => {
       try {
@@ -327,7 +367,7 @@ export function BackgroundMidiPlayer() {
           return
         }
         parsed = midi
-        beginPlayback()
+        attemptPlay()
       } catch (error: unknown) {
         reportMidiError(error)
       }
@@ -337,8 +377,7 @@ export function BackgroundMidiPlayer() {
 
     return () => {
       disposed = true
-      window.removeEventListener("pointerdown", onInteract)
-      window.removeEventListener("click", onInteract)
+      detachInteract()
       Tone.Transport.stop()
       Tone.Transport.cancel(0)
       Tone.Transport.loop = false

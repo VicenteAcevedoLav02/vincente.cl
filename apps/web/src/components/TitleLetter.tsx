@@ -10,6 +10,7 @@ type TitleLetterProps = {
   char: string
   color: string
   index: number
+  struck: boolean
   onClick: () => void
 }
 
@@ -20,7 +21,7 @@ function accessibleName(char: string): string {
   return `Letter ${char}`
 }
 
-export function TitleLetter({ char, color, index, onClick }: TitleLetterProps) {
+export function TitleLetter({ char, color, index, struck, onClick }: TitleLetterProps) {
   const style: LetterStyle = {
     "--letter": color,
     "--index": index,
@@ -29,7 +30,7 @@ export function TitleLetter({ char, color, index, onClick }: TitleLetterProps) {
   return (
     <button
       type="button"
-      className={styles.letter}
+      className={struck ? `${styles.letter} ${styles.struck}` : styles.letter}
       style={style}
       aria-label={accessibleName(char)}
       onClick={onClick}

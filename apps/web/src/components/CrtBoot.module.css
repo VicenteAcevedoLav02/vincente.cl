@@ -1,0 +1,72 @@
+.crt {
+  position: absolute;
+  inset: 0;
+  z-index: 30;
+  background: #000000;
+  pointer-events: auto;
+  animation: power 1700ms linear forwards;
+}
+
+.beam {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 100%;
+  background: linear-gradient(#ffffff, #e7fff4 45%, #ffffff);
+  box-shadow:
+    0 0 10px 3px rgba(220, 255, 236, 0.95),
+    0 0 36px 10px rgba(255, 255, 255, 0.55);
+  transform: translateY(-50%) scaleY(0);
+  transform-origin: center;
+  animation: beam 1700ms linear forwards;
+}
+
+@keyframes beam {
+  0% {
+    transform: translateY(-50%) scaleY(0);
+    opacity: 0;
+  }
+  10% {
+    transform: translateY(-50%) scaleY(0.014);
+    opacity: 1;
+  }
+  22% {
+    transform: translateY(-50%) scaleY(0.014);
+    opacity: 1;
+  }
+  64% {
+    transform: translateY(-50%) scaleY(1);
+    opacity: 1;
+  }
+  76% {
+    transform: translateY(-50%) scaleY(1);
+    opacity: 1;
+    filter: brightness(1.85);
+  }
+  100% {
+    transform: translateY(-50%) scaleY(1);
+    opacity: 0;
+    filter: brightness(1);
+  }
+}
+
+@keyframes power {
+  0%,
+  70% {
+    opacity: 1;
+  }
+  80% {
+    background: #f4fff8;
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .crt {
+    display: none;
+  }
+}

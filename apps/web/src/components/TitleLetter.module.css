@@ -25,7 +25,7 @@
   line-height: 1;
   letter-spacing: 0;
   white-space: nowrap;
-  cursor: pointer;
+  cursor: none;
   user-select: none;
   transform: translateY(0);
   transition: transform 180ms cubic-bezier(0.34, 1.45, 0.64, 1);
@@ -78,6 +78,74 @@
   transition-timing-function: ease-out;
 }
 
+.struck {
+  animation: slam 520ms cubic-bezier(0.22, 0.9, 0.28, 1);
+}
+
+.struck .glyph {
+  animation-name: flash, press-shadow, wave;
+  animation-duration: 900ms, 520ms, 3s;
+  animation-timing-function: linear, ease-out, linear;
+  animation-iteration-count: 1, 1, infinite;
+  animation-delay: 0s, 0s, calc((var(--wave-steps) - var(--index)) * -3s / var(--wave-steps));
+}
+
+@keyframes slam {
+  0%,
+  42% {
+    transform: translate(0.16em, 0.24em) scale(0.96);
+  }
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+}
+
+@keyframes flash {
+  0%,
+  12% {
+    filter: brightness(8) saturate(0);
+  }
+  13%,
+  30% {
+    filter: none;
+  }
+  31%,
+  43% {
+    filter: brightness(8) saturate(0);
+  }
+  44%,
+  61% {
+    filter: none;
+  }
+  62%,
+  74% {
+    filter: brightness(8) saturate(0);
+  }
+  75%,
+  100% {
+    filter: none;
+  }
+}
+
+@keyframes press-shadow {
+  0%,
+  42% {
+    text-shadow:
+      0.04em 0.04em 0 var(--shade),
+      0.08em 0.08em 0 var(--edge);
+  }
+  100% {
+    text-shadow:
+      0.05em 0.05em 0 var(--shade),
+      0.1em 0.1em 0 var(--shade),
+      0.15em 0.15em 0 var(--shade),
+      0.2em 0.2em 0 var(--shade),
+      0.25em 0.25em 0 var(--shade),
+      0.3em 0.3em 0 var(--shade),
+      0.34em 0.34em 0 var(--edge);
+  }
+}
+
 @keyframes wave {
   0% { transform: translateY(0); }
   12.5% { transform: translateY(-7.07px); }
@@ -92,11 +160,10 @@
 
 @media (prefers-reduced-motion: reduce) {
   .letter,
-  .glyph {
+  .glyph,
+  .struck,
+  .struck .glyph {
     transition: none;
-  }
-
-  .glyph {
     animation: none;
   }
 }
