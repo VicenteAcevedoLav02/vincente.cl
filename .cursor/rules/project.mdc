@@ -1,0 +1,10 @@
+---
+alwaysApply: true
+---
+This is a pnpm + Turborepo monorepo. Apps live in apps/, shared code in packages/.
+- Stack: React 18+, TypeScript (strict), Vite. No Next.js.
+- Never install packages at the root unless they are dev tooling; use `pnpm --filter <app> add <pkg>`.
+- Write small, typed components. No `any`. Use CSS Modules or plain CSS unless told otherwise.
+- Do not modify files outside the app named in the prompt.
+- After changes, make sure `pnpm --filter web build` passes.
+- Explain briefly what you changed at the end.
