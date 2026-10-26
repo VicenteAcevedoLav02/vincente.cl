@@ -2,7 +2,9 @@ import { Midi, type Track } from "@tonejs/midi"
 import { useEffect } from "react"
 import * as Tone from "tone"
 
-const MIDI_URL = "/music/ambient.mid"
+import { publicUrl } from "../publicUrl.ts"
+
+const MIDI_URL = publicUrl("/music/ambient.mid")
 const VOLUME_DB = -14
 const PERCUSSION_CHANNEL = 9
 

@@ -1,7 +1,8 @@
 import { Midi } from "@tonejs/midi"
 import * as Tone from "tone"
+import { publicUrl } from "../publicUrl.ts"
 
-const SFX_URL = "/music/sfx.mid"
+const SFX_URL = publicUrl("/music/sfx.mid")
 const SFX_DB = -10
 const DRUM_CHANNEL = 9
 const FALL_CHANNEL = 14

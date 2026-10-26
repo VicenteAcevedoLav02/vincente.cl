@@ -8,6 +8,7 @@ import {
 import { playFlyBuzz, playFlyHit, playSwatMiss, stopFlyBuzz } from "../audio/sfx.ts"
 import { createFlyPath, pointOnPath, type Point } from "../game/flyPath.ts"
 import { titleIsRaised } from "../game/titleRaise.ts"
+import { publicUrl } from "../publicUrl.ts"
 import styles from "./FlySwat.module.css"
 
 const FLIGHT_MS = 5000
@@ -21,13 +22,13 @@ const SWAT_HEIGHT = 160
 const SWAT_HOT_X = 62
 const SWAT_HOT_Y = 28
 
-const FLY_FRAMES = ["/images/fly1.png", "/images/fly2.png"] as const
+const FLY_FRAMES = [publicUrl("/images/fly1.png"), publicUrl("/images/fly2.png")] as const
 
 const SWAT_SRC = {
-  idle: "/images/swat_idle.png",
-  two: "/images/swat_2.png",
-  three: "/images/swat_3.png",
-  active: "/images/swat_active.png",
+  idle: publicUrl("/images/swat_idle.png"),
+  two: publicUrl("/images/swat_2.png"),
+  three: publicUrl("/images/swat_3.png"),
+  active: publicUrl("/images/swat_active.png"),
 } as const
 
 type SwatFrame = keyof typeof SWAT_SRC
