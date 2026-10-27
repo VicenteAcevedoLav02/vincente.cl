@@ -3,8 +3,10 @@ export interface ProjectLink {
   href: string
 }
 
-export const projects: readonly ProjectLink[] = [
-  { label: "placeholder 1", href: "#" },
-  { label: "placeholder 2", href: "#" },
-  { label: "placeholder 3", href: "#" },
-]
+export const projects: readonly ProjectLink[] = Array.from(
+  { length: 100 },
+  (_, index) => ({
+    label: `placeholder ${index + 1}`,
+    href: "#",
+  }),
+)
