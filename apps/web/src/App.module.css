@@ -14,10 +14,16 @@
   cursor: none;
 }
 
+.docked {
+  justify-content: flex-start;
+  gap: 0;
+}
+
 .page {
   position: relative;
   display: flex;
   flex-direction: column;
+  flex: 0 0 auto;
   width: 100vmin;
   height: 100vmin;
   width: 100dvmin;
@@ -26,6 +32,16 @@
   background: #ffffff;
   user-select: none;
   --label-size: clamp(0.9rem, 4.3vmin, 1.36rem);
+  transition:
+    width 1.4s cubic-bezier(0.22, 0.82, 0.2, 1),
+    height 1.4s cubic-bezier(0.22, 0.82, 0.2, 1),
+    max-width 1.4s cubic-bezier(0.22, 0.82, 0.2, 1);
+}
+
+.docked .page {
+  width: min(100dvmin, 62dvw);
+  height: min(100dvmin, 62dvw);
+  max-width: calc(100% - max(240px, 38dvw));
 }
 
 .stage {
@@ -36,4 +52,20 @@
   align-items: center;
   justify-content: center;
   padding: 1.5rem 0.75rem 0.5rem;
+}
+
+.debugPane {
+  position: relative;
+  flex: 1 1 auto;
+  align-self: stretch;
+  min-width: max(240px, 38dvw);
+  height: 100%;
+  overflow: hidden;
+  background: #000000;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page {
+    transition: none;
+  }
 }

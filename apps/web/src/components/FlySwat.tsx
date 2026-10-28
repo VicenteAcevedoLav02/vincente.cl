@@ -250,6 +250,7 @@ export function FlySwat({ onScore, ready }: FlySwatProps) {
     if (!ready) {
       return
     }
+
     const arm = () => {
       window.clearTimeout(gapTimer.current)
       gapTimer.current = window.setTimeout(() => {
@@ -277,13 +278,16 @@ export function FlySwat({ onScore, ready }: FlySwatProps) {
         return
       }
       const hit = flyRef.current?.trySwat(event.clientX, event.clientY) ?? false
-      const onTitle =
-        event.target instanceof Element && Boolean(event.target.closest("h1"))
+      const target = event.target instanceof Element ? event.target : null
+      const onTitle = Boolean(target?.closest("h1"))
+      const onDebugControl = Boolean(
+        target?.closest("[data-debug-toggle], [data-debug-close], aside"),
+      )
       if (hit) {
         stopFlyBuzz()
         playFlyHit()
         onScoreRef.current()
-      } else if (!(onTitle && !titleIsRaised())) {
+      } else if (!onDebugControl && !(onTitle && !titleIsRaised())) {
         playSwatMiss()
       }
       pointerDownRef.current = true

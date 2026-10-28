@@ -4,11 +4,14 @@ import styles from "./CrtBoot.module.css"
 
 interface CrtBootProps {
   onDone: () => void
+  playSound?: boolean
 }
 
-export function CrtBoot({ onDone }: CrtBootProps) {
+export function CrtBoot({ onDone, playSound = true }: CrtBootProps) {
   useEffect(() => {
-    playPowerOn()
+    if (playSound) {
+      playPowerOn()
+    }
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches
     if (reduce) {
       onDone()
@@ -18,7 +21,7 @@ export function CrtBoot({ onDone }: CrtBootProps) {
     return () => {
       window.clearTimeout(timer)
     }
-  }, [onDone])
+  }, [onDone, playSound])
 
   return (
     <div

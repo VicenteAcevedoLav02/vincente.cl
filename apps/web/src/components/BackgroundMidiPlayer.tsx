@@ -2,9 +2,11 @@ import { Midi, type Track } from "@tonejs/midi"
 import { useEffect } from "react"
 import * as Tone from "tone"
 
+import { markResource, registerMidi } from "../game/resources.ts"
 import { publicUrl } from "../publicUrl.ts"
 
 const MIDI_URL = publicUrl("/music/ambient.mid")
+const AMBIENT_ID = "ambient.mid"
 const VOLUME_DB = -14
 const PERCUSSION_CHANNEL = 9
 
@@ -363,14 +365,21 @@ export function BackgroundMidiPlayer() {
     attachInteract()
 
     const load = async () => {
+      registerMidi(AMBIENT_ID, "AMBIENT.MID", MIDI_URL)
       try {
         const midi = await Midi.fromUrl(MIDI_URL)
         if (disposed) {
           return
         }
         parsed = midi
+        markResource(
+          AMBIENT_ID,
+          "ready",
+          `${midi.tracks.length} TRK ${midi.duration.toFixed(1)}S`,
+        )
         attemptPlay()
       } catch (error: unknown) {
+        markResource(AMBIENT_ID, "error", "LOAD FAIL")
         reportMidiError(error)
       }
     }

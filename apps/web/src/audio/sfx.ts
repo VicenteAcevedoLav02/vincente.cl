@@ -1,13 +1,15 @@
 import { Midi } from "@tonejs/midi"
 import * as Tone from "tone"
+import { markResource, registerMidi } from "../game/resources.ts"
 import { publicUrl } from "../publicUrl.ts"
 
 const SFX_URL = publicUrl("/music/sfx.mid")
+const SFX_ID = "sfx.mid"
 const SFX_DB = -10
 const DRUM_CHANNEL = 9
 const FALL_CHANNEL = 14
 
-type CueName = "fly" | "hit" | "miss" | "levelup" | "power"
+type CueName = "fly" | "hit" | "miss" | "levelup" | "power" | "warp"
 
 interface SfxNote {
   channel: number
@@ -23,6 +25,7 @@ const CUE_TRACKS: Record<CueName, readonly string[]> = {
   miss: ["Miss Snare"],
   levelup: ["Level Up", "Level Snare"],
   power: ["Power Snare", "Power Whine"],
+  warp: ["Warp Lead", "Warp Echo", "Warp Tick"],
 }
 
 interface Voices {
@@ -46,14 +49,16 @@ function report(error: unknown): void {
 }
 
 function emptyCues(): Record<CueName, SfxNote[]> {
-  return { fly: [], hit: [], miss: [], levelup: [], power: [] }
+  return { fly: [], hit: [], miss: [], levelup: [], power: [], warp: [] }
 }
 
 function loadSfx(): Promise<void> {
   if (!loading) {
+    registerMidi(SFX_ID, "SFX.MID", SFX_URL)
     loading = Midi.fromUrl(SFX_URL)
       .then((midi) => {
         const next = emptyCues()
+        let notes = 0
         for (const cue of Object.keys(CUE_TRACKS) as CueName[]) {
           const names = new Set(CUE_TRACKS[cue])
           for (const track of midi.tracks) {
@@ -71,17 +76,30 @@ function loadSfx(): Promise<void> {
                 duration: note.duration,
                 velocity: Math.min(1, Math.max(0, note.velocity)),
               })
+              notes += 1
             }
           }
         }
         cues = next
+        markResource(SFX_ID, "ready", `${notes} NOTES`)
       })
       .catch((error: unknown) => {
         loading = null
+        markResource(SFX_ID, "error", "LOAD FAIL")
         report(error)
       })
   }
   return loading
+}
+
+export function getSfxStatus(): { loaded: boolean; cues: number } {
+  if (!cues) {
+    return { loaded: false, cues: 0 }
+  }
+  return {
+    loaded: true,
+    cues: Object.values(cues).reduce((sum, notes) => sum + notes.length, 0),
+  }
 }
 
 function shortSquare(): Tone.PolySynth {
@@ -215,6 +233,10 @@ export function playLevelUp(): void {
 
 export function playPowerOn(): void {
   start("power")
+}
+
+export function playWarp(): void {
+  start("warp")
 }
 
 void loadSfx()
