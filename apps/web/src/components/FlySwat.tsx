@@ -281,7 +281,9 @@ export function FlySwat({ onScore, ready }: FlySwatProps) {
       const target = event.target instanceof Element ? event.target : null
       const onTitle = Boolean(target?.closest("h1"))
       const onDebugControl = Boolean(
-        target?.closest("[data-debug-toggle], [data-debug-close], aside"),
+        target?.closest(
+          "[data-debug-toggle], [data-debug-close], [data-resume-link], aside",
+        ),
       )
       if (hit) {
         stopFlyBuzz()

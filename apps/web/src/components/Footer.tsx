@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom"
 import { CopyrightMark } from "./CopyrightMark.tsx"
 import styles from "./Footer.module.css"
 
@@ -24,7 +25,9 @@ export function Footer({ year, pop, debugOpen, onToggleDebug }: FooterProps) {
             </span>
           ) : null}
         </span>{" "}
-        Vicente Acevedo
+        <Link to="/resume" className={styles.name} data-resume-link="" aria-label="Open resume">
+          Vicente Acevedo
+        </Link>
       </p>
     </footer>
   )

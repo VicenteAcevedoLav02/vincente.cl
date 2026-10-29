@@ -9,7 +9,7 @@ const SFX_DB = -10
 const DRUM_CHANNEL = 9
 const FALL_CHANNEL = 14
 
-type CueName = "fly" | "hit" | "miss" | "levelup" | "power" | "warp"
+type CueName = "fly" | "hit" | "miss" | "levelup" | "power" | "warp" | "channel"
 
 interface SfxNote {
   channel: number
@@ -26,6 +26,7 @@ const CUE_TRACKS: Record<CueName, readonly string[]> = {
   levelup: ["Level Up", "Level Snare"],
   power: ["Power Snare", "Power Whine"],
   warp: ["Warp Lead", "Warp Echo", "Warp Tick"],
+  channel: ["Channel Snare", "Channel Zap"],
 }
 
 interface Voices {
@@ -49,7 +50,7 @@ function report(error: unknown): void {
 }
 
 function emptyCues(): Record<CueName, SfxNote[]> {
-  return { fly: [], hit: [], miss: [], levelup: [], power: [], warp: [] }
+  return { fly: [], hit: [], miss: [], levelup: [], power: [], warp: [], channel: [] }
 }
 
 function loadSfx(): Promise<void> {
@@ -237,6 +238,10 @@ export function playPowerOn(): void {
 
 export function playWarp(): void {
   start("warp")
+}
+
+export function playChannelChange(): void {
+  start("channel")
 }
 
 void loadSfx()
