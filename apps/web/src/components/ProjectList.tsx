@@ -1,6 +1,11 @@
 import { useEffect, useRef, useState } from "react"
+import { Link } from "react-router-dom"
 import { projects } from "../config/projects.ts"
 import styles from "./ProjectList.module.css"
+
+function isAppRoute(href: string): boolean {
+  return href.startsWith("/") && href !== "/"
+}
 
 function prefersReducedMotion(): boolean {
   return (
@@ -76,17 +81,23 @@ export function ProjectList() {
           <ul className={styles.items}>
             {projects.map((project) => (
               <li key={project.label}>
-                <a
-                  className={styles.link}
-                  href={project.href}
-                  onClick={(event) => {
-                    if (project.href === "#") {
-                      event.preventDefault()
-                    }
-                  }}
-                >
-                  {project.label}
-                </a>
+                {isAppRoute(project.href) ? (
+                  <Link className={styles.link} to={project.href}>
+                    {project.label}
+                  </Link>
+                ) : (
+                  <a
+                    className={styles.link}
+                    href={project.href}
+                    onClick={(event) => {
+                      if (project.href === "#") {
+                        event.preventDefault()
+                      }
+                    }}
+                  >
+                    {project.label}
+                  </a>
+                )}
               </li>
             ))}
           </ul>

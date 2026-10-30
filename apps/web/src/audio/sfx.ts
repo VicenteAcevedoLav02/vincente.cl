@@ -9,7 +9,7 @@ const SFX_DB = -10
 const DRUM_CHANNEL = 9
 const FALL_CHANNEL = 14
 
-type CueName = "fly" | "hit" | "miss" | "levelup" | "power" | "warp" | "channel"
+type CueName = "fly" | "hit" | "miss" | "levelup" | "power" | "warp" | "channel" | "static"
 
 interface SfxNote {
   channel: number
@@ -27,6 +27,7 @@ const CUE_TRACKS: Record<CueName, readonly string[]> = {
   power: ["Power Snare", "Power Whine"],
   warp: ["Warp Lead", "Warp Echo", "Warp Tick"],
   channel: ["Channel Snare", "Channel Zap"],
+  static: ["Static Snare"],
 }
 
 interface Voices {
@@ -35,6 +36,7 @@ interface Voices {
   sting: Tone.PolySynth
   fall: Tone.PolySynth
   snares: Tone.NoiseSynth[]
+  staticNoise: Tone.NoiseSynth
 }
 
 let cues: Record<CueName, SfxNote[]> | null = null
@@ -50,7 +52,16 @@ function report(error: unknown): void {
 }
 
 function emptyCues(): Record<CueName, SfxNote[]> {
-  return { fly: [], hit: [], miss: [], levelup: [], power: [], warp: [], channel: [] }
+  return {
+    fly: [],
+    hit: [],
+    miss: [],
+    levelup: [],
+    power: [],
+    warp: [],
+    channel: [],
+    static: [],
+  }
 }
 
 function loadSfx(): Promise<void> {
@@ -134,12 +145,29 @@ function ensureVoices(): Voices | null {
         envelope: { attack: 0.001, decay: 0.14, sustain: 0, release: 0.02 },
       }).connect(volume),
   )
-  voices = { volume, buzz, sting, fall, snares }
+  const staticNoise = new Tone.NoiseSynth({
+    noise: { type: "white" },
+    envelope: { attack: 0.002, decay: 0.1, sustain: 0.55, release: 0.18 },
+  }).connect(volume)
+  voices = { volume, buzz, sting, fall, snares, staticNoise }
   return voices
 }
 
 function trigger(cue: CueName, note: SfxNote, bank: Voices): void {
   const when = Tone.now()
+  if (cue === "static") {
+    bank.staticNoise.triggerAttackRelease(
+      Math.max(0.04, note.duration),
+      when,
+      note.velocity,
+    )
+    if (note.duration < 0.12) {
+      const snare = bank.snares[snareIndex % bank.snares.length]
+      snareIndex += 1
+      snare?.triggerAttackRelease(note.duration, when, note.velocity * 0.7)
+    }
+    return
+  }
   if (note.channel === DRUM_CHANNEL) {
     const snare = bank.snares[snareIndex % bank.snares.length]
     snareIndex += 1
@@ -242,6 +270,10 @@ export function playWarp(): void {
 
 export function playChannelChange(): void {
   start("channel")
+}
+
+export function playChannelStatic(): void {
+  start("static")
 }
 
 void loadSfx()

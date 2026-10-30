@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
-import { playChannelChange } from "../audio/sfx.ts"
 import { publicUrl } from "../publicUrl.ts"
 import styles from "./ResumePage.module.css"
 
@@ -69,10 +68,6 @@ function PixelChevron() {
 export function ResumePage() {
   const [phase, setPhase] = useState<AvisoPhase>("open")
   const [exitSrc, setExitSrc] = useState<string | null>(null)
-
-  useEffect(() => {
-    playChannelChange()
-  }, [])
 
   useEffect(() => {
     if (phase !== "leaving") {

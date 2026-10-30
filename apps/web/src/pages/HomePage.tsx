@@ -8,6 +8,7 @@ import { Footer } from "../components/Footer.tsx"
 import { ProjectList } from "../components/ProjectList.tsx"
 import { Title } from "../components/Title.tsx"
 import { preloadImages } from "../game/resources.ts"
+import { resetTitleRaise } from "../game/titleRaise.ts"
 import { publicUrl } from "../publicUrl.ts"
 import styles from "../App.module.css"
 
@@ -33,6 +34,7 @@ export function HomePage() {
   const [debugBooting, setDebugBooting] = useState(false)
 
   useEffect(() => {
+    resetTitleRaise()
     void preloadImages(IMAGE_ASSETS)
   }, [])
 

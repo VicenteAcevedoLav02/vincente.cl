@@ -1,0 +1,102 @@
+.overlay {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  z-index: 10000;
+  width: 100vmin;
+  height: 100vmin;
+  width: 100dvmin;
+  height: 100dvmin;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  overflow: hidden;
+  background: transparent;
+}
+
+.noiseWrap {
+  position: absolute;
+  inset: 0;
+  background: #000000;
+  animation: noiseClear 520ms linear forwards;
+}
+
+.noise {
+  display: block;
+  width: 100%;
+  height: 100%;
+  image-rendering: pixelated;
+  opacity: 1;
+}
+
+.channel {
+  position: absolute;
+  top: clamp(0.7rem, 3.2vmin, 1.2rem);
+  right: clamp(0.85rem, 3.6vmin, 1.4rem);
+  z-index: 2;
+  margin: 0;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  /* Classic CRT OSD: condensed/stretched sans, not 7-seg / not pixel. */
+  font-family: "Barlow Condensed", "Arial Narrow", "Helvetica Neue Condensed", Arial,
+    sans-serif;
+  font-weight: 600;
+  font-style: normal;
+  font-size: clamp(1.05rem, 4.6vmin, 1.7rem);
+  line-height: 1;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #7adf6a;
+  text-shadow: none;
+  border: none;
+  outline: none;
+  -webkit-text-stroke: 0;
+  transform: scaleX(0.82) scaleY(1.18);
+  transform-origin: top right;
+  -webkit-font-smoothing: antialiased;
+  animation: channelAfterStatic 1920ms linear forwards;
+}
+
+/* Static holds, then drops away so the page is visible under the OSD. */
+@keyframes noiseClear {
+  0% {
+    opacity: 1;
+  }
+  72% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* Channel stays fully lit until static is gone, then fades slowly. */
+@keyframes channelAfterStatic {
+  0% {
+    opacity: 1;
+  }
+  30% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.overlayReduced .noiseWrap {
+  animation-duration: 180ms;
+}
+
+.overlayReduced .channel {
+  animation-duration: 420ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .noiseWrap {
+    animation-duration: 180ms;
+  }
+
+  .channel {
+    animation-duration: 420ms;
+  }
+}

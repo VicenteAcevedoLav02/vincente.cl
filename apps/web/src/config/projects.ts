@@ -3,7 +3,7 @@ export interface ProjectLink {
   href: string
 }
 
-const VISITALAS_URL = "https://vicenteacevedolav02.github.io/visitalas.cl/"
+export const VISITALAS_POC_URL = "https://vicenteacevedolav02.github.io/visitalas.cl/"
 
 export const projects: readonly ProjectLink[] = Array.from(
   { length: 100 },
@@ -11,7 +11,7 @@ export const projects: readonly ProjectLink[] = Array.from(
     if (index === 0) {
       return {
         label: "visitalas.cl",
-        href: VISITALAS_URL,
+        href: "/visitalas",
       }
     }
     return {

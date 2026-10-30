@@ -11,3 +11,7 @@ export function claimTitleRaise(): boolean {
   raised = true
   return true
 }
+
+export function resetTitleRaise(): void {
+  raised = false
+}
